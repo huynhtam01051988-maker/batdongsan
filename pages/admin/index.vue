@@ -719,6 +719,7 @@
                     </td>
                     <td>
                       <div class="table-actions">
+                        <CongCuAiCanNha :property="p" icons />
                         <button 
                           v-if="p.categoryId === 'nha-pho'" 
                           type="button"
