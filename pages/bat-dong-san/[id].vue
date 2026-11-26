@@ -76,6 +76,7 @@
             </div>
           </div>
         </div>
+        <CongCuAiCanNha :property="property" />
 
         <!-- 3. Grid: Left (Gallery + Content + Map) & Right (Sticky Agent Card) -->
         <div class="detail-main-layout">
