@@ -6,11 +6,28 @@
     AI chỉ chạy khi nhân viên đăng nhập công cụ và tự bấm "Viết tin". Khóa AI nằm trên máy chủ AI riêng, không nằm trong file này.
   - "Tra quy hoạch" mở cổng tra cứu của Sở Quy hoạch – Kiến trúc TP.HCM; kết quả ghi vào ô Quy hoạch trong khung Viết 5 tin.
   Dùng: <CongCuAiCanNha :property="property" /> trong pages/bat-dong-san/[id].vue (khung đầy đủ),
-        <CongCuAiCanNha :property="property" compact /> trong components/PropertyCard.vue (2 nút gọn dưới mỗi thẻ căn).
-  Muốn gỡ: xóa 2 dòng đó và file này.
+        <CongCuAiCanNha :property="property" compact /> trong components/PropertyCard.vue (2 nút gọn dưới mỗi thẻ căn),
+        <CongCuAiCanNha :property="p" icons /> trong pages/admin/index.vue (2 nút vuông ở cột Thao tác của bảng Quỹ Căn).
+  Muốn gỡ: xóa 3 dòng đó và file này.
 -->
 <template>
-  <div v-if="isStaff && property && compact" class="ai-staff-row">
+  <template v-if="isStaff && property && icons">
+    <button type="button" class="action-btn ai-icon-btn" title="Viết 5 tin AI" @click="openTool">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </button>
+    <a
+      class="action-btn ai-icon-btn"
+      :href="QH_URL"
+      target="_blank"
+      rel="noopener"
+      :title="copied ? 'Đã chép địa chỉ căn, dán vào ô Tìm vị trí trên cổng' : 'Tra quy hoạch (chép sẵn địa chỉ căn để dán)'"
+      @click="copyAddress"
+    >
+      <i :class="copied ? 'fa-solid fa-check' : 'fa-solid fa-map-location-dot'"></i>
+    </a>
+  </template>
+
+  <div v-else-if="isStaff && property && compact" class="ai-staff-row">
     <button type="button" class="btn btn-gold ai-staff-mini" @click="openTool">
       <i class="fa-solid fa-wand-magic-sparkles"></i> Viết 5 tin AI
     </button>
@@ -77,7 +94,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const props = defineProps<{ property: any; compact?: boolean }>();
+const props = defineProps<{ property: any; compact?: boolean; icons?: boolean }>();
 
 const TOOL_ORIGIN = 'https://nha-dat-mr-tam.pages.dev';
 const TOOL_URL = TOOL_ORIGIN + '/?nhung=1';
@@ -211,6 +228,18 @@ async function copyAddress() {
 </script>
 
 <style scoped>
+.ai-icon-btn {
+  background: var(--adm-gold-bg, rgba(212, 175, 55, 0.12));
+  border-color: var(--adm-gold-border, rgba(212, 175, 55, 0.4));
+  color: var(--adm-gold, #d4af37);
+}
+
+.ai-icon-btn:hover {
+  background: var(--adm-gold-gradient, linear-gradient(135deg, #c59b27 0%, #d4af37 50%, #996c14 100%));
+  color: #0c1322;
+  border-color: transparent;
+}
+
 .ai-staff-row {
   display: flex;
   flex-wrap: wrap;
