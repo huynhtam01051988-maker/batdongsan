@@ -63,6 +63,7 @@
           <i class="fa-solid fa-phone"></i> Xem Nhà
         </a>
       </div>
+      <CongCuAiCanNha :property="property" compact />
     </div>
   </div>
 </template>
