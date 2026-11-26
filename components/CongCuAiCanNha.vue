@@ -4,7 +4,8 @@
   - "Viết 5 tin AI" mở công cụ của web Nhà Đất Mr. Tâm (chế độ nhúng ?nhung=1) ngay trên trang,
     điền sẵn thông tin công khai của căn (tiêu đề, địa chỉ, giá, diện tích, kết cấu, pháp lý, mô tả...).
     AI chỉ chạy khi nhân viên đăng nhập công cụ và tự bấm "Viết tin". Khóa AI nằm trên máy chủ AI riêng, không nằm trong file này.
-  - "Tra quy hoạch" mở cổng tra cứu của Sở Quy hoạch – Kiến trúc TP.HCM; kết quả ghi vào ô Quy hoạch trong khung Viết 5 tin.
+  - "Tra quy hoạch" mở cổng Thông tin quy hoạch TP.HCM (UBND TP) và chép sẵn địa chỉ căn; cổng của Sở Xây dựng là cổng dự phòng.
+    Kết quả tra ghi vào ô Quy hoạch trong khung Viết 5 tin.
   Dùng: <CongCuAiCanNha :property="property" /> trong pages/bat-dong-san/[id].vue (khung đầy đủ),
         <CongCuAiCanNha :property="property" compact /> trong components/PropertyCard.vue (2 nút gọn dưới mỗi thẻ căn),
         <CongCuAiCanNha :property="p" icons /> trong pages/admin/index.vue (2 nút vuông ở cột Thao tác của bảng Quỹ Căn).
@@ -20,7 +21,7 @@
       :href="QH_URL"
       target="_blank"
       rel="noopener"
-      :title="copied ? 'Đã chép địa chỉ căn, dán vào ô Tìm vị trí trên cổng' : 'Tra quy hoạch (chép sẵn địa chỉ căn để dán)'"
+      :title="copied ? 'Đã chép địa chỉ căn: trên cổng bấm kính lúp → Đường → dán' : 'Tra quy hoạch (chép sẵn địa chỉ căn để dán)'"
       @click="copyAddress"
     >
       <i :class="copied ? 'fa-solid fa-check' : 'fa-solid fa-map-location-dot'"></i>
@@ -36,12 +37,12 @@
       :href="QH_URL"
       target="_blank"
       rel="noopener"
-      title="Mở cổng tra quy hoạch của Sở; địa chỉ căn được chép sẵn để dán"
+      title="Mở cổng Thông tin quy hoạch TP.HCM; địa chỉ căn được chép sẵn để dán"
       @click="copyAddress"
     >
       <i class="fa-solid fa-map-location-dot"></i> Tra quy hoạch
     </a>
-    <small v-if="copied" class="ai-staff-copied">Đã chép địa chỉ căn, dán vào ô Tìm vị trí trên cổng.</small>
+    <small v-if="copied" class="ai-staff-copied">Đã chép địa chỉ căn: trên cổng bấm kính lúp → Đường → dán → Tìm kiếm.</small>
   </div>
 
   <div v-else-if="isStaff && property" class="ai-staff-box">
@@ -54,14 +55,17 @@
         <i class="fa-solid fa-wand-magic-sparkles"></i> Viết 5 tin AI
       </button>
       <a class="btn btn-outline-gold" :href="QH_URL" target="_blank" rel="noopener">
-        <i class="fa-solid fa-map-location-dot"></i> Tra quy hoạch (cổng của Sở)
+        <i class="fa-solid fa-map-location-dot"></i> Tra quy hoạch
       </a>
       <button type="button" class="btn btn-outline-gold" @click="copyAddress">
         <i class="fa-regular fa-copy"></i> {{ copied ? 'Đã chép địa chỉ' : 'Chép địa chỉ' }}
       </button>
+      <a class="btn btn-outline-gold" :href="QH_URL2" target="_blank" rel="noopener">
+        <i class="fa-solid fa-up-right-from-square"></i> Cổng dự phòng (Sở Xây dựng)
+      </a>
     </div>
     <p class="ai-staff-note">
-      Tra quy hoạch: mở cổng của Sở → bấm Tìm vị trí → dán địa chỉ. Ghi kết quả vào ô Quy hoạch trong khung Viết 5 tin để AI đưa vào tin.
+      Tra quy hoạch: trên cổng bấm kính lúp → Đường → dán địa chỉ → Tìm kiếm, phóng to rồi bấm vào đúng thửa đất. Ghi kết quả vào ô Quy hoạch trong khung Viết 5 tin để AI đưa vào tin.
     </p>
   </div>
 
@@ -98,7 +102,8 @@ const props = defineProps<{ property: any; compact?: boolean; icons?: boolean }>
 
 const TOOL_ORIGIN = 'https://nha-dat-mr-tam.pages.dev';
 const TOOL_URL = TOOL_ORIGIN + '/?nhung=1';
-const QH_URL = 'https://gisxaydung.tphcm.gov.vn/tracuuttqh';
+const QH_URL = 'https://thongtinquyhoach.hochiminhcity.gov.vn/';
+const QH_URL2 = 'https://gisxaydung.tphcm.gov.vn/tracuuttqh';
 const TAG = 'mrtam-nhung';
 
 const isStaff = ref(false);
