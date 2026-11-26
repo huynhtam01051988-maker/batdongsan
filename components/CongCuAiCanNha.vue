@@ -5,10 +5,29 @@
     điền sẵn thông tin công khai của căn (tiêu đề, địa chỉ, giá, diện tích, kết cấu, pháp lý, mô tả...).
     AI chỉ chạy khi nhân viên đăng nhập công cụ và tự bấm "Viết tin". Khóa AI nằm trên máy chủ AI riêng, không nằm trong file này.
   - "Tra quy hoạch" mở cổng tra cứu của Sở Quy hoạch – Kiến trúc TP.HCM; kết quả ghi vào ô Quy hoạch trong khung Viết 5 tin.
-  Dùng: <CongCuAiCanNha :property="property" /> trong pages/bat-dong-san/[id].vue. Muốn gỡ: xóa dòng đó và file này.
+  Dùng: <CongCuAiCanNha :property="property" /> trong pages/bat-dong-san/[id].vue (khung đầy đủ),
+        <CongCuAiCanNha :property="property" compact /> trong components/PropertyCard.vue (2 nút gọn dưới mỗi thẻ căn).
+  Muốn gỡ: xóa 2 dòng đó và file này.
 -->
 <template>
-  <div v-if="isStaff && property" class="ai-staff-box">
+  <div v-if="isStaff && property && compact" class="ai-staff-row">
+    <button type="button" class="btn btn-gold ai-staff-mini" @click="openTool">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> Viết 5 tin AI
+    </button>
+    <a
+      class="btn btn-outline-gold ai-staff-mini"
+      :href="QH_URL"
+      target="_blank"
+      rel="noopener"
+      title="Mở cổng tra quy hoạch của Sở; địa chỉ căn được chép sẵn để dán"
+      @click="copyAddress"
+    >
+      <i class="fa-solid fa-map-location-dot"></i> Tra quy hoạch
+    </a>
+    <small v-if="copied" class="ai-staff-copied">Đã chép địa chỉ căn, dán vào ô Tìm vị trí trên cổng.</small>
+  </div>
+
+  <div v-else-if="isStaff && property" class="ai-staff-box">
     <div class="ai-staff-head">
       <span class="ai-staff-title"><i class="fa-solid fa-wand-magic-sparkles"></i> Công cụ nhân viên</span>
       <small class="ai-staff-sub">Chỉ máy đã đăng nhập Quản Trị mới thấy, khách không thấy</small>
@@ -58,7 +77,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const props = defineProps<{ property: any }>();
+const props = defineProps<{ property: any; compact?: boolean }>();
 
 const TOOL_ORIGIN = 'https://nha-dat-mr-tam.pages.dev';
 const TOOL_URL = TOOL_ORIGIN + '/?nhung=1';
@@ -192,6 +211,30 @@ async function copyAddress() {
 </script>
 
 <style scoped>
+.ai-staff-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-gold);
+}
+
+.ai-staff-mini {
+  flex: 1 1 0;
+  min-width: 0;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  padding: 7px 10px;
+}
+
+.ai-staff-copied {
+  flex-basis: 100%;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
 .ai-staff-box {
   background: var(--bg-card);
   border: 1px dashed var(--border-gold);
